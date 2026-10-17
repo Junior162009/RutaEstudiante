@@ -289,7 +289,7 @@ async function compareRoadOptions(){
  if(!oq||!dq){out.innerHTML='<strong>Falta el origen o el destino</strong><small>Escribe los dos campos. No hace falta activar el GPS.</small>';msg('Escribe manualmente el origen y el destino para comparar rutas.');(!oq?$('origin'):$('dest')).focus();return}
  btn.disabled=true;out.innerHTML='<strong>Buscando alternativas…</strong><small>Consultando el servicio de rutas viales.</small>';
  try{
-  const [a,b]=await Promise.all([geocodeTrip(oq),geocodeTrip(dq)]);
+  const [a,b]=await Promise.all([(/mi ubicación actual/i.test(oq)&&user?Promise.resolve({name:'Mi ubicación actual',lat:user.lat,lon:user.lon}):geocodeTrip(oq)),geocodeTrip(dq)]);
   tripOrigin=a;tripDestination=b;
   const url='https://router.project-osrm.org/route/v1/driving/'+a.lon+','+a.lat+';'+b.lon+','+b.lat+'?overview=full&geometries=geojson&steps=false&alternatives=true';
   const response=await fetch(url);if(!response.ok)throw Error('El servicio de rutas no está disponible ahora.');
