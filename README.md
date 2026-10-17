@@ -7,11 +7,13 @@ PWA inicial para consultar lugares y paraderos cartografiados en Barranquilla y 
 - Búsqueda de lugares mediante Nominatim.
 - Ubicación GPS opcional con seguimiento mientras la app está visible, indicador de precisión aproximada y botón para detenerlo; búsqueda manual disponible.
 - Consulta de paraderos registrados en OpenStreetMap a 1 km (Overpass).
+- Widget integrado de Q’ruta para consultar rutas SOBUSA, con opción de abrirlo en otra pestaña.
 - Favoritos, historial y tema oscuro guardados localmente.
 - PWA instalable y caché básica de la interfaz.
 - Sin anuncios integrados.
 
 ## Limitaciones importantes
+- El widget SOBUSA depende de la disponibilidad y contenido del servicio externo Q’ruta; no es una API propia ni una fuente de GPS en vivo.
 - No incluye una base oficial y validada de rutas de buses de Barranquilla y Soledad.
 - No calcula itinerarios de transporte público ni transbordos.
 - No muestra posición de buses en tiempo real ni predice llegadas.
@@ -24,7 +26,7 @@ Web estática. Se puede publicar con GitHub Pages desde la raíz de la rama prin
 
 ## Auditoría de fuentes de transporte
 
-Consulta [`docs/FUENTES_TRANSPORTE.md`](./docs/FUENTES_TRANSPORTE.md) para ver fuentes públicas revisadas, fechas observadas, advertencias de licencia y estado de integración. No se confirmó un feed público autorizado de posiciones GPS de buses de Transmetro; por eso no se simulan vehículos ni llegadas.
+Consulta [`docs/FUENTES_TRANSPORTE.md`](./docs/FUENTES_TRANSPORTE.md) para ver fuentes públicas revisadas, fechas observadas, advertencias de licencia y estado de integración. El widget de rutas SOBUSA usa Q’ruta: https://routes.queruta.com/?city=OWcpsp0ID3&company=yZYZbPJGbq. No se confirmó un feed público autorizado de posiciones GPS de buses de Transmetro; por eso no se simulan vehículos ni llegadas.
 
 ## Fuentes y políticas
 - OpenStreetMap: https://www.openstreetmap.org/copyright
