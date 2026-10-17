@@ -60,7 +60,7 @@ const GTFS_BASE='https://raw.githubusercontent.com/ColombiaInfo/ColombiaGTFS/mas
 let gtfsCache=null,gtfsRouteLayer=null;
 function gtfsStatus(text){$('gtfs-status').textContent=text}
 function csvRows(text){
- const lines=text.replace(/^\\uFEFF/,'').trim().split(/\\r?\\n/);if(!lines.length)return [];
+ const lines=text.replace(/^\uFEFF/,'').trim().split(/\r?\n/);if(!lines.length)return [];
  const parse=line=>{const out=[];let v='',q=false;for(let i=0;i<line.length;i++){const c=line[i];if(c==='"'&&q&&line[i+1]==='"'){v+='"';i++}else if(c==='"')q=!q;else if(c===','&&!q){out.push(v);v=''}else v+=c}out.push(v);return out};
  const headers=parse(lines.shift());return lines.filter(Boolean).map(line=>{const vals=parse(line),row={};headers.forEach((k,i)=>row[k]=vals[i]??'');return row});
 }
@@ -82,12 +82,12 @@ async function loadGTFS(){
 function gtfsMeters(a,b){const rad=n=>n*Math.PI/180,R=6371000,dLat=rad(b.lat-a.lat),dLon=rad(b.lon-a.lon),x=Math.sin(dLat/2)**2+Math.cos(rad(a.lat))*Math.cos(rad(b.lat))*Math.sin(dLon/2)**2;return 2*R*Math.asin(Math.sqrt(x))}
 function gtfsNearStops(stops,point){return stops.map(s=>({...s,distance:gtfsMeters(point,s)})).filter(s=>s.distance<=1800).sort((a,b)=>a.distance-b.distance).slice(0,5)}
 function gtfsTimeRows(text,originIds,destIds){
- const rows=text.split(/\\r?\\n/);if(rows.length<2)return {common:new Set(),stopRows:[]};
+ const rows=text.split(/\r?\n/);if(rows.length<2)return {common:new Set(),stopRows:[]};
  const header=rows[0].split(','),idx=Object.fromEntries(header.map((v,i)=>[v,i]));
  const originTrips=new Set(),destTrips=new Set(),stopRows=[];
  for(let i=1;i<rows.length;i++){const line=rows[i];if(!line)continue;const v=line.split(','),tid=v[idx.trip_id],sid=v[idx.stop_id];if(!tid||!sid)continue;if(originIds.has(sid))originTrips.add(tid);if(destIds.has(sid))destTrips.add(tid)}
  const common=new Set([...originTrips].filter(id=>destTrips.has(id)));
- if(!common.size)return [];
+ if(!common.size)return {common:new Set(),stopRows:[]};
  for(let i=1;i<rows.length;i++){const line=rows[i];if(!line)continue;const v=line.split(','),tid=v[idx.trip_id];if(common.has(tid))stopRows.push({trip_id:tid,stop_id:v[idx.stop_id],arrival_time:v[idx.arrival_time]||'',departure_time:v[idx.departure_time]||'',stop_sequence:Number(v[idx.stop_sequence])})}
  return {common,stopRows};
 }
