@@ -14,6 +14,10 @@
 <div><span style="color:#d52c35">●</span> Ubicación GPS del teléfono</div>
 </div>
 <div id="trip-summary" class="item" aria-live="polite"><strong>Selecciona origen y destino</strong><small>El trazado vial no representa una ruta de autobús confirmada.</small></div>
+<div class="section"><h3>🚌 Buscar autobús (GTFS)</h3><small>Beta · datos históricos</small></div>
+<button type="button" class="btn full" id="find-bus-routes">Buscar servicios que conectan origen y destino</button>
+<div id="gtfs-status" class="notice" role="status">La fuente GTFS pública encontrada contiene calendarios antiguos (2016–2017). Los resultados solo pueden servir como referencia histórica; confirma cualquier recorrido con el operador antes de viajar.</div>
+<div id="gtfs-results"></div>
 <div class="section"><h3>Datos de transporte público</h3><small>Fuentes públicas</small></div>
 <button type="button" class="btn full" id="load-transit-data">Consultar paraderos publicados de Transmetro</button>
 <div id="transit-data-status" class="notice" role="status">La fuente pública de paraderos tiene datos históricos. Se mostrarán como referencia, no como confirmación de operación actual.</div>
@@ -47,6 +51,78 @@ $('load-transit-data').addEventListener('click',async()=>{
   transitStatus('Se cargaron '+transitStops.length+' registros públicos. El catálogo indica datos de paraderos con última actualización de datos en 2020; las rutas activas, horarios y vehículos en vivo no están confirmados.',true);
  }catch(err){transitStatus('No se pudo consultar el catálogo: '+err.message+'. Los datos no se inventaron; puedes consultar la fuente oficial de Transmetro.');}
  finally{button.disabled=false}
+});
+
+
+// Buscador experimental de conexiones directas con un feed GTFS comunitario.
+// La fuente encontrada declara calendario 2016-2017: jamás se presenta como servicio vigente.
+const GTFS_BASE='https://raw.githubusercontent.com/ColombiaInfo/ColombiaGTFS/master/Barranquilla%20-%20Transmetro/';
+let gtfsCache=null,gtfsRouteLayer=null;
+function gtfsStatus(text){$('gtfs-status').textContent=text}
+function csvRows(text){
+ const lines=text.replace(/^\\uFEFF/,'').trim().split(/\\r?\\n/);if(!lines.length)return [];
+ const parse=line=>{const out=[];let v='',q=false;for(let i=0;i<line.length;i++){const c=line[i];if(c==='"'&&q&&line[i+1]==='"'){v+='"';i++}else if(c==='"')q=!q;else if(c===','&&!q){out.push(v);v=''}else v+=c}out.push(v);return out};
+ const headers=parse(lines.shift());return lines.filter(Boolean).map(line=>{const vals=parse(line),row={};headers.forEach((k,i)=>row[k]=vals[i]??'');return row});
+}
+async function loadGTFS(){
+ if(gtfsCache)return gtfsCache;
+ gtfsCache=(async()=>{
+  const files=['stops.txt','routes.txt','trips.txt','stop_times.txt','calendar.txt'];
+  const texts=await Promise.all(files.map(async name=>{const r=await fetch(GTFS_BASE+name,{cache:'force-cache'});if(!r.ok)throw Error('No se pudo descargar '+name+' (HTTP '+r.status+').');return r.text()}));
+  const [stopsText,routesText,tripsText,timesText,calendarText]=texts;
+  const stops=csvRows(stopsText).map(s=>({...s,lat:Number(s.stop_lat),lon:Number(s.stop_lon)})).filter(s=>s.stop_id&&Number.isFinite(s.lat)&&Number.isFinite(s.lon));
+  const routes=new Map(csvRows(routesText).map(r=>[r.route_id,r]));
+  const trips=new Map(csvRows(tripsText).map(t=>[t.trip_id,t]));
+  const calendar=csvRows(calendarText);
+  const years=[...calendar.flatMap(c=>[c.start_date,c.end_date])].filter(Boolean).map(x=>String(x).slice(0,4));
+  return {stops,routes,trips,timesText,calendar,years:[...new Set(years)].sort()};
+ })().catch(err=>{gtfsCache=null;throw err});
+ return gtfsCache;
+}
+function gtfsMeters(a,b){const rad=n=>n*Math.PI/180,R=6371000,dLat=rad(b.lat-a.lat),dLon=rad(b.lon-a.lon),x=Math.sin(dLat/2)**2+Math.cos(rad(a.lat))*Math.cos(rad(b.lat))*Math.sin(dLon/2)**2;return 2*R*Math.asin(Math.sqrt(x))}
+function gtfsNearStops(stops,point){return stops.map(s=>({...s,distance:gtfsMeters(point,s)})).filter(s=>s.distance<=1800).sort((a,b)=>a.distance-b.distance).slice(0,5)}
+function gtfsTimeRows(text,originIds,destIds){
+ const rows=text.split(/\\r?\\n/);if(rows.length<2)return [];
+ const header=rows[0].split(','),idx=Object.fromEntries(header.map((v,i)=>[v,i]));
+ const originTrips=new Set(),destTrips=new Set(),stopRows=[];
+ for(let i=1;i<rows.length;i++){const line=rows[i];if(!line)continue;const v=line.split(','),tid=v[idx.trip_id],sid=v[idx.stop_id];if(!tid||!sid)continue;if(originIds.has(sid))originTrips.add(tid);if(destIds.has(sid))destTrips.add(tid)}
+ const common=new Set([...originTrips].filter(id=>destTrips.has(id)));
+ if(!common.size)return [];
+ for(let i=1;i<rows.length;i++){const line=rows[i];if(!line)continue;const v=line.split(','),tid=v[idx.trip_id];if(common.has(tid))stopRows.push({trip_id:tid,stop_id:v[idx.stop_id],arrival_time:v[idx.arrival_time]||'',departure_time:v[idx.departure_time]||'',stop_sequence:Number(v[idx.stop_sequence])})}
+ return {common,stopRows};
+}
+function gtfsMinutes(t){if(!t)return null;const p=t.split(':').map(Number);return p.length>=2&&p.every(Number.isFinite)?p[0]*60+p[1]:null}
+$('find-bus-routes').addEventListener('click',async()=>{
+ const btn=$('find-bus-routes');if(!tripOrigin||!tripDestination){gtfsStatus('Primero busca un origen y destino en el planificador.');return}
+ btn.disabled=true;$('gtfs-results').innerHTML='';gtfsStatus('Descargando el catálogo GTFS y buscando conexiones directas…');
+ try{
+  const feed=await loadGTFS(),origins=gtfsNearStops(feed.stops,tripOrigin),destinations=gtfsNearStops(feed.stops,tripDestination);
+  if(!origins.length||!destinations.length){gtfsStatus('No hay paraderos del catálogo histórico a menos de 1,8 km de uno de los puntos.');return}
+  const match=gtfsTimeRows(feed.timesText,new Set(origins.map(s=>s.stop_id)),new Set(destinations.map(s=>s.stop_id)));
+  if(!match.common.size){$('gtfs-results').innerHTML='<div class="item"><strong>No se encontró conexión directa en el feed histórico.</strong><small>Esto no demuestra que hoy no exista un bus; el feed puede estar incompleto o desactualizado.</small></div>';gtfsStatus('Se revisaron '+origins.length+' paraderos cercanos al origen y '+destinations.length+' al destino. El feed GTFS tiene calendario histórico '+(feed.years.join(', ')||'sin fechas')+'. No se verificaron transbordos ni operación actual.');return}
+  const stopById=new Map(feed.stops.map(s=>[s.stop_id,s]));
+  const found=[];
+  for(const tid of match.common){
+   const trip=feed.trips.get(tid);if(!trip)continue;
+   const route=feed.routes.get(trip.route_id);if(!route)continue;
+   const sequence=match.stopRows.filter(r=>r.trip_id===tid).sort((a,b)=>a.stop_sequence-b.stop_sequence);
+   for(const o of origins){const oi=sequence.findIndex(r=>r.stop_id===o.stop_id);if(oi<0)continue;for(const d of destinations){const di=sequence.findIndex(r=>r.stop_id===d.stop_id);if(di<=oi)continue;
+    const segment=sequence.slice(oi,di+1),first=segment[0],last=segment[segment.length-1],start=gtfsMinutes(first.departure_time||first.arrival_time),end=gtfsMinutes(last.arrival_time||last.departure_time);
+    found.push({route,trip,segment,origin:o,dest:d,start,end,duration:start!==null&&end!==null?(end-start+1440)%1440:null});}}
+  }
+  const unique=new Map();found.sort((a,b)=>(a.origin.distance+a.dest.distance)-(b.origin.distance+b.dest.distance));found.forEach(x=>{const key=x.route.route_id+'|'+x.origin.stop_id+'|'+x.dest.stop_id;if(!unique.has(key))unique.set(key,x)});
+  const results=[...unique.values()].slice(0,8);
+  if(!results.length){$('gtfs-results').innerHTML='<div class="item"><strong>No se encontró un recorrido ordenado.</strong><small>El feed antiguo puede contener datos incompletos.</small></div>';}
+  else $('gtfs-results').innerHTML=results.map((r,i)=>'<div class="item"><strong>🚌 '+esc(r.route.route_short_name||r.route.route_long_name||'Ruta registrada')+' · '+esc(r.route.route_long_name||r.trip.trip_headsign||'Servicio sin nombre')+'</strong><small>Subida histórica: '+esc(r.origin.stop_name)+' ('+Math.round(r.origin.distance)+' m del origen)</small><small>Bajada histórica: '+esc(r.dest.stop_name)+' ('+Math.round(r.dest.distance)+' m del destino)</small><small>'+r.segment.length+' paraderos en el tramo'+(r.duration!==null?' · duración publicada aproximada '+r.duration+' min':'')+'</small><button class="btn soft" data-gtfs-route="'+i+'">Ver trazado de referencia</button></div>').join('');
+  $('gtfs-results').querySelectorAll('[data-gtfs-route]').forEach(button=>button.addEventListener('click',()=>{
+   const r=results[Number(button.dataset.gtfsRoute)];if(gtfsRouteLayer)map.removeLayer(gtfsRouteLayer);gtfsRouteLayer=L.layerGroup().addTo(map);
+   const points=r.segment.map(row=>stopById.get(row.stop_id)).filter(Boolean);
+   if(points.length){L.polyline(points.map(p=>[p.lat,p.lon]),{color:'#8b5cf6',weight:6,opacity:.9,dashArray:'8 6'}).addTo(gtfsRouteLayer);points.forEach((p,i)=>L.circleMarker([p.lat,p.lon],{radius:i===0||i===points.length-1?7:3,color:'#6d28d9',fillColor:'#c4b5fd',fillOpacity:.9}).bindPopup((i+1)+'. '+esc(p.stop_name)).addTo(gtfsRouteLayer));map.fitBounds(L.latLngBounds(points.map(p=>[p.lat,p.lon])).pad(.15))}
+   gtfsStatus('Trazado morado = secuencia del feed histórico, no ubicación GPS ni servicio actual. Confirma con el operador antes de viajar.');
+  }));
+  gtfsStatus('Resultados de conexiones directas en un feed comunitario con calendario '+(feed.years.join('–')||'sin fechas')+'. Esos calendarios están vencidos: no uses horarios ni recorridos como confirmación de servicio actual. No hay datos GPS en vivo y aún no se calculan transbordos.');
+ }catch(err){gtfsStatus('No se pudo calcular la conexión: '+err.message+' Comprueba tu conexión. El feed depende de un servicio externo y puede no estar disponible.');}
+ finally{btn.disabled=false}
 });
 
 // Planificador fase 1: geocodificación y trazado vial de referencia.
