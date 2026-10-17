@@ -1,6 +1,48 @@
 <!doctype html>
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#087f68"><meta name="description" content="Mapa y consulta de paraderos para Barranquilla y Soledad. Sin anuncios integrados."><title>RutaEstudiante | Muévete con confianza</title><link rel="manifest" href="./manifest.webmanifest"><link rel="icon" href="./assets/icon.svg"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"><style>
 :root{--bg:#f2f7f4;--card:#fff;--ink:#17372f;--muted:#63776f;--green:#087f68;--pale:#dff6eb;--line:#dbe8e1}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}.top{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;background:var(--card);border-bottom:1px solid var(--line)}.brand{display:flex;gap:10px;align-items:center}.logo{font-size:25px;background:var(--pale);padding:8px;border-radius:14px}.brand h1{font-size:17px;margin:0}.brand small{color:var(--muted)}button,input{font:inherit}button{cursor:pointer}.pill,.btn{border-radius:12px;border:1px solid var(--line);padding:10px 12px;font-weight:700}.pill{background:var(--card);color:var(--ink);font-size:12px}.primary{background:var(--green);color:white;border-color:var(--green)}.soft{background:var(--pale);color:#075b48}.layout{display:grid;grid-template-columns:370px 1fr;min-height:calc(100dvh - 68px)}aside{padding:18px;overflow:auto;max-height:calc(100dvh - 68px)}.eyebrow{color:var(--green);font-weight:800;letter-spacing:1.2px;font-size:11px;text-transform:uppercase}.intro h2{font-size:28px;line-height:1.1;margin:8px 0}.intro p{color:var(--muted);font-size:14px;line-height:1.5}.box,.item{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:13px}.field{display:flex;gap:9px;align-items:center;border:1px solid var(--line);border-radius:11px;padding:0 10px;margin-bottom:9px}.field input{border:0;outline:0;width:100%;min-width:0;padding:13px 0;background:transparent;color:var(--ink)}.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}.full{width:100%;margin-top:8px}.section{display:flex;justify-content:space-between;align-items:center;margin:20px 0 9px;font-size:13px}.section h3{margin:0}.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.quick button{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 2px;font-size:11px;font-weight:700;color:var(--ink)}.quick b{display:block;font-size:19px;margin-bottom:4px}.notice{background:#fff4d9;color:#71520d;border-radius:12px;padding:11px;margin-top:12px;font-size:12px;line-height:1.5}.notice.ok{background:#dff6eb;color:#075b48}.item{margin:8px 0}.item strong{display:block;font-size:13px}.item small{display:block;color:var(--muted);font-size:12px;line-height:1.5;margin-top:4px}.item button{margin-top:8px;font-size:12px}.mapwrap{position:relative;min-height:500px}#map{height:100%;min-height:500px}.maptag{position:absolute;z-index:400;top:13px;left:13px;background:var(--card);padding:10px 12px;border:1px solid var(--line);border-radius:12px;font-size:12px;font-weight:800}.mapbuttons{position:absolute;z-index:400;right:13px;bottom:20px;display:grid;gap:8px}.mapbuttons button{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;font-size:18px}.foot{font-size:11px;color:var(--muted);line-height:1.5;margin-top:18px}.route-widget{margin-top:20px}.route-widget h3{font-size:15px;margin:0 0 6px}.route-widget p{font-size:12px;line-height:1.5;color:var(--muted);margin:0 0 10px}.route-frame{width:100%;height:500px;border:1px solid var(--line);border-radius:12px;background:var(--card);box-shadow:0 4px 6px rgba(0,0,0,.08);display:block}.route-link{display:inline-block;margin-top:8px;font-size:12px;font-weight:700;color:var(--green)}.bottom{display:none}body.dark{--bg:#10221d;--card:#183129;--ink:#e7f6ef;--muted:#a5bdb3;--green:#43cba5;--pale:#204a3d;--line:#2a493d;color-scheme:dark}body.dark .notice{background:#493d21;color:#ffe5a0}body.dark .notice.ok{background:#204a3d;color:#b7f4db}@media(max-width:780px){.layout{display:flex;flex-direction:column}.mapwrap{order:0;min-height:43vh;height:43vh}.mapwrap #map{min-height:43vh}aside{order:1;max-height:none;padding:15px}.intro h2{font-size:25px}.bottom{display:grid;grid-template-columns:repeat(4,1fr);position:sticky;bottom:0;z-index:500;background:var(--card);border-top:1px solid var(--line);padding:7px 8px max(7px,env(safe-area-inset-bottom))}.bottom button{border:0;background:transparent;color:var(--muted);font-size:11px}.bottom b{display:block;font-size:19px}.top{padding-top:max(12px,env(safe-area-inset-top))}}
+
+/* Ajustes UX progresivos: conservan el mapa Leaflet y los controles existentes. */
+:root{scroll-behavior:smooth}
+.top{position:sticky;top:0;z-index:700;box-shadow:0 3px 14px rgba(16,55,43,.06)}
+button,input,a{ -webkit-tap-highlight-color:transparent}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid #f0ad36;outline-offset:3px}
+button{transition:transform .15s ease,box-shadow .15s ease,background-color .15s ease}
+button:not(:disabled):active{transform:scale(.98)}
+button:disabled{cursor:wait;opacity:.62}
+.box{box-shadow:0 5px 18px rgba(16,55,43,.035)}
+.field:focus-within{border-color:var(--green);box-shadow:0 0 0 3px color-mix(in srgb,var(--green) 16%,transparent)}
+.field input:focus{outline:0}
+.btn{min-height:42px}
+.item{overflow-wrap:anywhere}
+.mapwrap{isolation:isolate}
+.maptag{box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.mapbuttons button{min-width:44px;min-height:44px;box-shadow:0 3px 12px rgba(0,0,0,.13)}
+.route-frame{max-width:100%}
+.bottom{box-shadow:0 -5px 20px rgba(16,55,43,.08)}
+@media(min-width:781px){
+ .layout{grid-template-columns:minmax(330px,390px) minmax(0,1fr);min-height:calc(100dvh - 68px)}
+ aside{position:relative}
+ .mapwrap{position:sticky;top:68px;height:calc(100dvh - 68px);min-height:520px}
+ #map{min-height:520px}
+ .intro h2{max-width:12ch}
+}
+@media(max-width:780px){
+ .top{position:sticky}
+ .layout{min-height:0}
+ .mapwrap{height:44dvh;min-height:280px}
+ .mapwrap #map{height:44dvh;min-height:280px}
+ aside{padding:12px 12px 92px}
+ .box,.item{border-radius:14px}
+ .intro h2{max-width:18ch}
+ .quick{grid-template-columns:repeat(4,minmax(0,1fr))}
+ .quick button{min-height:66px}
+ .bottom{position:fixed;left:0;right:0;bottom:0}
+ .route-frame{height:390px}
+ .mapbuttons{bottom:14px;right:10px}
+}
+@media(prefers-reduced-motion:reduce){:root{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}}
+
 </style></head><body><header class="top"><div class="brand"><div class="logo">🚌</div><div><h1>RutaEstudiante</h1><small>Barranquilla · Soledad</small></div></div><button id="theme" class="pill">🌙 Tema</button></header><main class="layout"><aside><div class="intro"><div class="eyebrow">Muévete con confianza</div><h2>¿A dónde quieres llegar?</h2><p>Busca lugares, consulta paraderos registrados y guarda destinos frecuentes. Gratis y sin anuncios integrados.</p></div><form id="search" class="box"><label class="field">📍 <input id="origin" placeholder="Origen (opcional)" aria-label="Origen"></label><label class="field">🏁 <input id="dest" placeholder="Colegio, universidad, dirección…" required aria-label="Destino"></label><div class="row"><button class="btn primary" type="submit">Buscar destino</button><button class="btn soft" id="locate" type="button">◎ Mi ubicación</button></div><button class="btn full" id="stops" type="button">🚌 Buses cerca de mí</button></form>
 <section class="box" id="trip-planner" style="margin-top:12px">
 <div class="section" style="margin-top:0"><h3>🧭 Planificador de viaje</h3><small>Fase 1</small></div>

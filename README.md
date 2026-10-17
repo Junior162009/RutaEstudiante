@@ -82,3 +82,16 @@ Se añadió un importador de recorridos que permite cargar archivos `KML`, `GPX`
 **Límite del widget de Q'ruta:** el contenido de `routes.queruta.com` se carga dentro de un iframe de otro dominio. La política de mismo origen del navegador impide que RutaEstudiante lea automáticamente qué ruta se seleccionó dentro del iframe. Por eso esta función necesita un archivo con las coordenadas de la ruta; no copia por sí sola una selección interna del widget. Q'ruta ha descrito el uso de recorridos KML para comunicar trazados de rutas: https://blog.queruta.com/index.php/2024/01/18/como-ayudarnos-con-informacion-de-rutas/.
 
 Pruebas reales con archivos de Q'ruta y validación en navegadores/dispositivos pendientes. No se afirma que exista una API oficial de Q'ruta disponible para esta integración.
+
+
+## Mejora progresiva de interfaz y accesibilidad
+
+La rama `feat/redisenio-ux-rutaestudiante` incorpora una capa de ajustes visuales sobre la interfaz existente: foco de teclado visible, controles táctiles con tamaño mínimo, estados deshabilitados, respuesta visual de botones, tarjetas más claras y ajustes responsive para que el mapa tenga mayor espacio en móvil y escritorio. No sustituye Leaflet, el planificador, las fuentes de datos, el importador ni el widget de Q'ruta.
+
+Se añadió una lista de comprobación manual en [docs/PRUEBAS-MANUALES.md](./docs/PRUEBAS-MANUALES.md). Es una guía pendiente de ejecución; no debe interpretarse como evidencia de pruebas ya realizadas.
+
+### Alcance de este cambio
+
+- Se mantienen las funciones existentes y sus identificadores de interfaz.
+- No se añadió una fuente de GPS de autobuses ni se presentan los datos GTFS históricos como vigentes.
+- La verificación en dispositivos físicos, la disponibilidad de servicios externos y las pruebas automatizadas quedan pendientes.
