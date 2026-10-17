@@ -41,3 +41,11 @@ Los servicios públicos pueden imponer límites o tener interrupciones; no se de
 2. Normalizar rutas, fuentes y fechas de actualización.
 3. Implementar planificación de transporte público solo cuando existan datos suficientes.
 4. Añadir pruebas automatizadas y revisar límites de APIs antes de producción.
+
+## Planificador de viaje — Fase 1
+
+La rama `feat/planificador-rutas-fase1` añade selección de origen y destino, búsqueda de coordenadas, un trazado vial de referencia y controles para mostrar ida (verde), vuelta (azul) o ambos recorridos. El trazado utiliza un servicio público de rutas viales y **no representa una ruta de autobús confirmada**. La distancia y duración mostradas son referencias del trazado vial, no predicciones del transporte público.
+
+Esta fase no calcula líneas de bus, paraderos de subida/bajada, horarios, transbordos ni ubicación GPS de vehículos. Para habilitar esas funciones hacen falta feeds GTFS vigentes y autorizados, validados para la zona, y un feed GTFS-Realtime oficial si se quieren mostrar vehículos en vivo. Los paraderos de OpenStreetMap no prueban que un servicio pase por ellos.
+
+El servicio de geocodificación y el motor de rutas son servicios públicos externos sujetos a disponibilidad, límites y políticas propias. La aplicación no debe presentar sus resultados como transporte público en tiempo real.
