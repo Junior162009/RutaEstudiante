@@ -23,7 +23,13 @@
 <div id="transit-data-status" class="notice" role="status">La fuente pública de paraderos tiene datos históricos. Se mostrarán como referencia, no como confirmación de operación actual.</div>
 <div id="transit-results"></div>
 </section>
-<div id="notice" class="notice" role="status" aria-live="polite">Busca un destino o permite ubicación para consultar paraderos cercanos.</div><section class="route-widget" aria-labelledby="sobusa-title"><div class="section"><h3 id="sobusa-title">🚌 Rutas SOBUSA</h3><small>Q’ruta</small></div><p>Consulta las rutas de SOBUSA. Si el panel no carga dentro de RutaEstudiante, abre Q’ruta directamente con el botón de abajo.</p><iframe class="route-frame" src="https://routes.queruta.com/?city=OWcpsp0ID3&amp;company=yZYZbPJGbq" title="Consulta de rutas SOBUSA en Q’ruta" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe><a class="route-link" href="https://routes.queruta.com/?city=OWcpsp0ID3&amp;company=yZYZbPJGbq" target="_blank" rel="noopener noreferrer">Abrir rutas SOBUSA en una pestaña ↗</a></section><div class="section"><h3>Accesos rápidos</h3><small>En este dispositivo</small></div><div class="quick"><button data-profile="Casa"><b>⌂</b>Casa</button><button data-profile="Colegio"><b>🎓</b>Colegio</button><button data-profile="Universidad"><b>🏫</b>Universidad</button><button data-profile="SENA"><b>🧰</b>SENA</button></div><div class="section"><h3>Resultados</h3><small id="count">0 lugares</small></div><div id="results"><div class="item"><strong>Tu viaje comienza aquí</strong><small>Busca un destino para mostrar resultados.</small></div></div><div class="section"><h3>Destinos guardados</h3><button class="pill" id="clear">Borrar todo</button></div><div id="favorites"></div><div class="section"><h3>Historial reciente</h3><small>Local</small></div><div id="history"></div><div class="foot">Los paraderos de OpenStreetMap pueden estar incompletos. Esta versión no incluye una base oficial completa de rutas de buses, no calcula transbordos y no muestra buses en tiempo real. No se envía la ubicación a un servidor propio.</div></aside><section class="mapwrap" aria-label="Mapa interactivo"><div id="map"></div><div class="maptag">🗺️ Mapa interactivo</div><div class="mapbuttons"><button id="recenter" aria-label="Centrar mapa">◎</button><button id="zoom" aria-label="Acercar mapa">＋</button></div></section></main><nav class="bottom"><button onclick="document.getElementById('dest').focus()"><b>⌕</b>Buscar</button><button onclick="document.getElementById('stops').click()"><b>🚌</b>Paraderos</button><button onclick="document.getElementById('favorites').scrollIntoView({behavior:'smooth'})"><b>☆</b>Guardados</button><button onclick="document.getElementById('recenter').click()"><b>◎</b>Mapa</button></nav><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script>
+<div id="notice" class="notice" role="status" aria-live="polite">Busca un destino o permite ubicación para consultar paraderos cercanos.</div><section class="route-widget" aria-labelledby="sobusa-title"><div class="section"><h3 id="sobusa-title">🚌 Rutas SOBUSA</h3><small>Q’ruta</small></div><p>Consulta las rutas de SOBUSA. Si el panel no carga dentro de RutaEstudiante, abre Q’ruta directamente con el botón de abajo.</p><iframe class="route-frame" src="https://routes.queruta.com/?city=OWcpsp0ID3&amp;company=yZYZbPJGbq" title="Consulta de rutas SOBUSA en Q’ruta" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe><a class="route-link" href="https://routes.queruta.com/?city=OWcpsp0ID3&amp;company=yZYZbPJGbq" target="_blank" rel="noopener noreferrer">Abrir rutas SOBUSA en una pestaña ↗</a>
+<div class="section"><h3>🗺️ Mostrar una ruta de Q’ruta en nuestro mapa</h3><small>Importar recorrido</small></div>
+<p>Si tienes el recorrido exportado o compartido como archivo KML, GPX o GeoJSON, impórtalo aquí para dibujarlo sobre el mapa principal. La selección hecha dentro del panel Q’ruta no se puede leer automáticamente desde otro sitio por la protección del navegador.</p>
+<label class="field">Archivo de recorrido <input id="route-import-file" type="file" accept=".kml,.gpx,.geojson,.json,application/vnd.google-earth.kml+xml,application/gpx+xml,application/geo+json,application/json"></label>
+<div class="row"><button type="button" class="btn primary" id="show-imported-route" disabled>Mostrar en el mapa</button><button type="button" class="btn soft" id="clear-imported-route" disabled>Quitar ruta</button></div>
+<div id="route-import-status" class="notice" role="status" aria-live="polite">Selecciona un archivo KML, GPX o GeoJSON que contenga las coordenadas del recorrido.</div>
+</section><div class="section"><h3>Accesos rápidos</h3><small>En este dispositivo</small></div><div class="quick"><button data-profile="Casa"><b>⌂</b>Casa</button><button data-profile="Colegio"><b>🎓</b>Colegio</button><button data-profile="Universidad"><b>🏫</b>Universidad</button><button data-profile="SENA"><b>🧰</b>SENA</button></div><div class="section"><h3>Resultados</h3><small id="count">0 lugares</small></div><div id="results"><div class="item"><strong>Tu viaje comienza aquí</strong><small>Busca un destino para mostrar resultados.</small></div></div><div class="section"><h3>Destinos guardados</h3><button class="pill" id="clear">Borrar todo</button></div><div id="favorites"></div><div class="section"><h3>Historial reciente</h3><small>Local</small></div><div id="history"></div><div class="foot">Los paraderos de OpenStreetMap pueden estar incompletos. Esta versión no incluye una base oficial completa de rutas de buses, no calcula transbordos y no muestra buses en tiempo real. No se envía la ubicación a un servidor propio.</div></aside><section class="mapwrap" aria-label="Mapa interactivo"><div id="map"></div><div class="maptag">🗺️ Mapa interactivo</div><div class="mapbuttons"><button id="recenter" aria-label="Centrar mapa">◎</button><button id="zoom" aria-label="Acercar mapa">＋</button></div></section></main><nav class="bottom"><button onclick="document.getElementById('dest').focus()"><b>⌕</b>Buscar</button><button onclick="document.getElementById('stops').click()"><b>🚌</b>Paraderos</button><button onclick="document.getElementById('favorites').scrollIntoView({behavior:'smooth'})"><b>☆</b>Guardados</button><button onclick="document.getElementById('recenter').click()"><b>◎</b>Mapa</button></nav><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script>
 (()=>{'use strict';const $=id=>document.getElementById(id),KEY='rutaestudiante-v1',city=[10.9878,-74.7889];let user=null,userMark=null,destMark=null,stopLayer=null,dark=false,favs=[],history=[],watchId=null;const map=L.map('map').setView(city,13);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'}).addTo(map);const userIcon=L.divIcon({className:'',html:'<div style="width:18px;height:18px;border:4px solid white;background:#1677ee;border-radius:50%"></div>',iconSize:[18,18],iconAnchor:[9,9]});function msg(t,ok=false){$('notice').textContent=t;$('notice').classList.toggle('ok',ok)}function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}function save(){localStorage.setItem(KEY,JSON.stringify({favs,history:history.slice(0,8),dark}))}function render(){$('favorites').innerHTML=favs.length?favs.map((p,i)=>'<div class="item"><strong>'+esc(p.name)+'</strong><small>'+p.lat.toFixed(4)+', '+p.lon.toFixed(4)+'</small><button class="btn soft" data-fav="'+i+'">Ver en mapa</button> <button class="btn" data-del="'+i+'">Quitar</button></div>').join(''):'<div class="item"><small>Aún no hay favoritos guardados.</small></div>';$('history').innerHTML=history.length?history.map((p,i)=>'<div class="item"><strong>'+esc(p.name)+'</strong><button class="btn" data-hist="'+i+'">Volver a ver</button></div>').join(''):'<div class="item"><small>Las búsquedas recientes aparecerán aquí.</small></div>'}function remember(p){history=[p,...history.filter(x=>x.lat!==p.lat||x.lon!==p.lon)].slice(0,8);save();render()}function favorite(p){if(!favs.some(x=>x.lat===p.lat&&x.lon===p.lon)){favs.unshift(p);save();render();msg('Destino guardado solo en este dispositivo.',true)}else msg('Ese destino ya está guardado.',true)}function place(p){if(destMark)map.removeLayer(destMark);destMark=L.marker([p.lat,p.lon]).addTo(map).bindPopup('<b>'+esc(p.name)+'</b><br>'+esc(p.display||'Lugar encontrado'));map.setView([p.lat,p.lon],16);$('dest').value=p.name;$('count').textContent='1 lugar';$('results').innerHTML='<div class="item"><strong>'+esc(p.name)+'</strong><small>'+esc(p.display||'')+'</small><small>Coordenadas: '+p.lat.toFixed(5)+', '+p.lon.toFixed(5)+'</small><button class="btn soft" id="saveplace">☆ Guardar destino</button><button class="btn" id="walk">Consultar navegación a pie ↗</button></div>';$('saveplace').onclick=()=>favorite(p);$('walk').onclick=()=>{if(!user){msg('Primero permite la ubicación para abrir indicaciones a pie.');return}window.open('https://www.openstreetmap.org/directions?engine=fossgis_osrm_foot&route='+user.lat+'%2C'+user.lon+'%3B'+p.lat+'%2C'+p.lon,'_blank','noopener')};remember(p)}
 
 // Datos públicos de paraderos Transmetro: el catálogo consultado reporta que sus
@@ -124,6 +130,82 @@ $('find-bus-routes').addEventListener('click',async()=>{
   gtfsStatus('Resultados de conexiones directas en un feed comunitario con calendario '+(feed.years.join('–')||'sin fechas')+'. Esos calendarios están vencidos: no uses horarios ni recorridos como confirmación de servicio actual. No hay datos GPS en vivo y aún no se calculan transbordos.');
  }catch(err){gtfsStatus('No se pudo calcular la conexión: '+err.message+' Comprueba tu conexión. El feed depende de un servicio externo y puede no estar disponible.');}
  finally{btn.disabled=false}
+});
+
+
+// Importador de recorridos: permite dibujar coordenadas exportadas desde una fuente externa
+// en el mapa principal. El contenido del iframe Q'ruta no se puede leer directamente
+// por la política de mismo origen del navegador.
+let importedRouteLayer=null,parsedImportedLines=[],importedRouteName='';
+const importFile=$('route-import-file'),showImported=$('show-imported-route'),clearImported=$('clear-imported-route');
+function importStatus(text,ok=false){$('route-import-status').textContent=text;$('route-import-status').classList.toggle('ok',ok)}
+function validRoutePoint(lon,lat){return Number.isFinite(lon)&&Number.isFinite(lat)&&Math.abs(lon)<=180&&Math.abs(lat)<=90}
+function readKmlRoute(text){
+ const xml=new DOMParser().parseFromString(text,'application/xml');if(xml.querySelector('parsererror'))throw Error('El KML no tiene XML válido.');
+ const lines=[];
+ xml.querySelectorAll('LineString coordinates').forEach(node=>{
+  const pts=node.textContent.trim().split(/\\s+/).map(pair=>{const p=pair.split(',').map(Number);return {lon:p[0],lat:p[1]}}).filter(p=>validRoutePoint(p.lon,p.lat));
+  if(pts.length>=2)lines.push(pts);
+ });
+ if(!lines.length)throw Error('El KML no contiene líneas de recorrido con coordenadas.');
+ return lines;
+}
+function readGpxRoute(text){
+ const xml=new DOMParser().parseFromString(text,'application/xml');if(xml.querySelector('parsererror'))throw Error('El GPX no tiene XML válido.');
+ const lines=[];
+ xml.querySelectorAll('trkseg,rte').forEach(segment=>{
+  const pts=[...segment.querySelectorAll('trkpt,rtept')].map(node=>({lat:Number(node.getAttribute('lat')),lon:Number(node.getAttribute('lon'))})).filter(p=>validRoutePoint(p.lon,p.lat));
+  if(pts.length>=2)lines.push(pts);
+ });
+ if(!lines.length){
+  const pts=[...xml.querySelectorAll('wpt')].map(node=>({lat:Number(node.getAttribute('lat')),lon:Number(node.getAttribute('lon'))})).filter(p=>validRoutePoint(p.lon,p.lat));
+  if(pts.length>=2)lines.push(pts);
+ }
+ if(!lines.length)throw Error('El GPX no contiene un track o ruta con al menos dos puntos.');
+ return lines;
+}
+function readGeoJsonRoute(text){
+ let data;try{data=JSON.parse(text)}catch{throw Error('El GeoJSON/JSON no es válido.')}
+ const lines=[],walk=coords=>{if(Array.isArray(coords)&&coords.length&&typeof coords[0][0]==='number'){
+  const pts=coords.map(c=>({lon:Number(c[0]),lat:Number(c[1])})).filter(p=>validRoutePoint(p.lon,p.lat));if(pts.length>=2)lines.push(pts);
+ }else if(Array.isArray(coords))coords.forEach(walk)};
+ const feature=f=>{if(!f)return;if(f.type==='FeatureCollection')f.features.forEach(feature);else if(f.type==='Feature')feature(f.geometry);else if(f.type==='LineString'||f.type==='MultiLineString'||f.type==='GeometryCollection'){if(f.type==='GeometryCollection')f.geometries.forEach(feature);else walk(f.coordinates)}};
+ feature(data);
+ if(!lines.length)throw Error('El GeoJSON no contiene una geometría LineString o MultiLineString.');
+ return lines;
+}
+importFile.addEventListener('change',async()=>{
+ parsedImportedLines=[];showImported.disabled=true;clearImported.disabled=!importedRouteLayer;
+ const file=importFile.files&&importFile.files[0];if(!file){importStatus('Selecciona un archivo KML, GPX o GeoJSON.');return}
+ try{
+  if(file.size>10*1024*1024)throw Error('El archivo supera el límite de 10 MB.');
+  const text=await file.text(),ext=file.name.split('.').pop().toLowerCase();
+  if(ext==='kml')parsedImportedLines=readKmlRoute(text);
+  else if(ext==='gpx')parsedImportedLines=readGpxRoute(text);
+  else if(ext==='geojson'||ext==='json')parsedImportedLines=readGeoJsonRoute(text);
+  else throw Error('Formato no compatible. Usa KML, GPX o GeoJSON.');
+  importedRouteName=file.name;showImported.disabled=false;
+  importStatus('Archivo leído: '+file.name+'. Se detectaron '+parsedImportedLines.length+' tramo(s) de recorrido. Pulsa “Mostrar en el mapa”.',true);
+ }catch(err){parsedImportedLines=[];showImported.disabled=true;importStatus(err.message)}
+});
+showImported.addEventListener('click',()=>{
+ if(!parsedImportedLines.length)return;
+ if(importedRouteLayer)map.removeLayer(importedRouteLayer);
+ importedRouteLayer=L.layerGroup().addTo(map);
+ const bounds=[];
+ parsedImportedLines.forEach((line,i)=>{
+  const coords=line.map(p=>[p.lat,p.lon]);coords.forEach(c=>bounds.push(c));
+  L.polyline(coords,{color:i===0?'#7c3aed':'#c026d3',weight:6,opacity:.92}).bindPopup('Ruta importada: '+esc(importedRouteName)+' · tramo '+(i+1)).addTo(importedRouteLayer);
+  L.circleMarker(coords[0],{radius:7,color:'#6d28d9',fillColor:'#ddd6fe',fillOpacity:1}).bindPopup('Inicio del tramo '+(i+1)).addTo(importedRouteLayer);
+  L.circleMarker(coords[coords.length-1],{radius:7,color:'#6d28d9',fillColor:'#ddd6fe',fillOpacity:1}).bindPopup('Fin del tramo '+(i+1)).addTo(importedRouteLayer);
+ });
+ if(bounds.length)map.fitBounds(L.latLngBounds(bounds).pad(.12));
+ clearImported.disabled=false;
+ importStatus('Ruta importada visible en el mapa principal: '+importedRouteName+'. Se muestran las coordenadas del archivo; comprueba que correspondan a la ruta correcta y estén actualizadas.',true);
+});
+clearImported.addEventListener('click',()=>{
+ if(importedRouteLayer)map.removeLayer(importedRouteLayer);importedRouteLayer=null;clearImported.disabled=true;
+ importStatus('Se quitó la ruta importada del mapa. Puedes cargar otro archivo.');
 });
 
 // Planificador fase 1: geocodificación y trazado vial de referencia.
