@@ -70,6 +70,9 @@ $('plan-trip').addEventListener('click',async()=>{
   const distance=(dist(tripOrigin.lat,tripOrigin.lon,tripDestination.lat,tripDestination.lon)/1000).toFixed(1);
   msg('Puntos encontrados. Calculando trazado vial de referencia…',true);
   await drawTrip(tripMode);
+  // El trazado se limpia al cambiar de modo; vuelve a añadir los marcadores después de dibujar las líneas.
+  L.circleMarker([tripOrigin.lat,tripOrigin.lon],{radius:8,color:'#d52c35',fillColor:'#d52c35',fillOpacity:1}).addTo(tripLayer).bindPopup('Origen: '+esc(tripOrigin.name));
+  destMark=L.marker([tripDestination.lat,tripDestination.lon]).addTo(tripLayer).bindPopup('Destino: '+esc(tripDestination.name));
   msg('Distancia directa aproximada: '+distance+' km. Importante: aún no se dispone de una base validada de itinerarios de bus para calcular líneas y transbordos.',true);
  }catch(err){setTripSummary('Error de búsqueda',err.message);msg(err.message)}
  finally{$('plan-trip').disabled=false}
