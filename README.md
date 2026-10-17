@@ -84,6 +84,12 @@ Se añadió un importador de recorridos que permite cargar archivos `KML`, `GPX`
 Pruebas reales con archivos de Q'ruta y validación en navegadores/dispositivos pendientes. No se afirma que exista una API oficial de Q'ruta disponible para esta integración.
 
 
+## Selección manual de origen y destino en el mapa
+
+La rama `feat/ux-seleccion-manual-mapa` añade controles para elegir el origen y el destino tocando directamente el mapa principal. Esta opción no requiere permiso de GPS y las coordenadas elegidas se utilizan en el trazado vial de referencia. También se puede seguir escribiendo direcciones; al editar un campo se descarta la selección manual correspondiente para evitar usar un punto anterior sin que el usuario lo note.
+
+El trazado calculado sigue siendo una referencia de calles y no confirma una ruta de autobús. Esta mejora no incorpora una fuente nueva de itinerarios oficiales ni de posiciones GPS de vehículos.
+
 ## Mejora progresiva de interfaz y accesibilidad
 
 La rama `feat/redisenio-ux-rutaestudiante` incorpora una capa de ajustes visuales sobre la interfaz existente: foco de teclado visible, controles táctiles con tamaño mínimo, estados deshabilitados, respuesta visual de botones, tarjetas más claras y ajustes responsive para que el mapa tenga mayor espacio en móvil y escritorio. No sustituye Leaflet, el planificador, las fuentes de datos, el importador ni el widget de Q'ruta.
