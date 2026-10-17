@@ -61,3 +61,16 @@ Fuentes de referencia:
 - Listado de rutas priorizadas del Área Metropolitana de Barranquilla: https://barranquilla.gov.co/transito/rutas-transporte-publico-barranquilla-soledad
 
 Limitación: no se ha encontrado ni validado en esta fase un feed GTFS vigente y un feed GTFS-Realtime autorizado que permita afirmar rutas completas, tiempos de llegada o localización de vehículos. El cálculo de conexiones y transbordos requiere datos actuales de itinerarios, secuencias de paradas y horarios.
+
+## Fase 3: buscador experimental de conexiones GTFS
+
+Se añadió un buscador de conexiones directas basado en el feed comunitario de ColombiaGTFS para Transmetro. La aplicación consulta paraderos, rutas, viajes y secuencias de paradas, encuentra paraderos cercanos al origen/destino, busca viajes GTFS que conecten ambos puntos y permite dibujar el tramo histórico en el mapa. El buscador no necesita un backend propio, pero depende de que GitHub Raw esté disponible y de que el navegador permita las solicitudes externas.
+
+**Advertencia crítica sobre vigencia:** el archivo `calendar.txt` de ese feed declara vigencia del 2016-01-01 al 2017-12-31. Por esa razón los resultados se muestran explícitamente como históricos, no como instrucciones actuales para viajar; tampoco se deben interpretar como horarios actuales. No se encontró en esta implementación una fuente oficial vigente de GTFS/GTFS-Realtime ni se afirma disponer de GPS de buses. El buscador de esta fase solo busca conexiones directas, no transbordos.
+
+Fuentes revisadas:
+- Feed comunitario GTFS: https://github.com/ColombiaInfo/ColombiaGTFS/tree/master/Barranquilla%20-%20Transmetro
+- Catálogo de paraderos: https://www.datos.gov.co/en/Transporte/Paraderos-del-Sistema/hxy3-94yh
+- Operación oficial Transmetro: https://transmetro.gov.co/
+
+Antes de usar resultados en producción, hay que sustituir el feed histórico por uno actualizado y verificar fechas, licencias, cobertura y funcionamiento. Las pruebas reales de red y navegador siguen pendientes.
