@@ -74,3 +74,11 @@ Fuentes revisadas:
 - Operación oficial Transmetro: https://transmetro.gov.co/
 
 Antes de usar resultados en producción, hay que sustituir el feed histórico por uno actualizado y verificar fechas, licencias, cobertura y funcionamiento. Las pruebas reales de red y navegador siguen pendientes.
+
+## Mostrar un recorrido de Q'ruta en el mapa principal
+
+Se añadió un importador de recorridos que permite cargar archivos `KML`, `GPX` o `GeoJSON` (máximo 10 MB) y dibujar sus líneas y extremos sobre el mapa Leaflet principal. La ruta importada se puede quitar sin borrar el planificador ni otros datos. Se validan las coordenadas y se informa cuando el archivo no contiene una geometría compatible.
+
+**Límite del widget de Q'ruta:** el contenido de `routes.queruta.com` se carga dentro de un iframe de otro dominio. La política de mismo origen del navegador impide que RutaEstudiante lea automáticamente qué ruta se seleccionó dentro del iframe. Por eso esta función necesita un archivo con las coordenadas de la ruta; no copia por sí sola una selección interna del widget. Q'ruta ha descrito el uso de recorridos KML para comunicar trazados de rutas: https://blog.queruta.com/index.php/2024/01/18/como-ayudarnos-con-informacion-de-rutas/.
+
+Pruebas reales con archivos de Q'ruta y validación en navegadores/dispositivos pendientes. No se afirma que exista una API oficial de Q'ruta disponible para esta integración.
