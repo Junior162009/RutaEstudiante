@@ -1,0 +1,234 @@
+{
+  "source": "Q'ruta public pages and public route-nearby listings",
+  "retrievedOn": "2026-10-17",
+  "notice": "Reference catalogue only. This is not a complete database, official API, live GPS feed, or confirmation that routes are currently operating. Verify with operators before relying on service details.",
+  "cities": [
+    {
+      "id": "armenia",
+      "name": "Armenia",
+      "department": "Quindío",
+      "center": [
+        4.5339,
+        -75.6811
+      ],
+      "status": "city-listed",
+      "qrutaCityId": null
+    },
+    {
+      "id": "barranquilla",
+      "name": "Barranquilla",
+      "department": "Atlántico",
+      "center": [
+        10.9878,
+        -74.7889
+      ],
+      "status": "city-listed",
+      "qrutaCityId": "OWcpsp0ID3"
+    },
+    {
+      "id": "bogota",
+      "name": "Bogotá",
+      "department": "Bogotá D.C.",
+      "center": [
+        4.711,
+        -74.0721
+      ],
+      "status": "city-listed",
+      "qrutaCityId": null
+    },
+    {
+      "id": "bucaramanga",
+      "name": "Bucaramanga",
+      "department": "Santander",
+      "center": [
+        7.1193,
+        -73.1227
+      ],
+      "status": "city-listed",
+      "qrutaCityId": null
+    },
+    {
+      "id": "cali",
+      "name": "Cali",
+      "department": "Valle del Cauca",
+      "center": [
+        3.4516,
+        -76.532
+      ],
+      "status": "city-listed",
+      "qrutaCityId": null
+    },
+    {
+      "id": "cartagena",
+      "name": "Cartagena",
+      "department": "Bolívar",
+      "center": [
+        10.391,
+        -75.4794
+      ],
+      "status": "city-listed",
+      "qrutaCityId": null
+    },
+    {
+      "id": "ibague",
+      "name": "Ibagué",
+      "department": "Tolima",
+      "center": [
+        4.4447,
+        -75.2424
+      ],
+      "status": "city-listed",
+      "qrutaCityId": null
+    },
+    {
+      "id": "medellin",
+      "name": "Medellín",
+      "department": "Antioquia",
+      "center": [
+        6.2476,
+        -75.5658
+      ],
+      "status": "city-listed",
+      "qrutaCityId": null
+    },
+    {
+      "id": "neiva",
+      "name": "Neiva",
+      "department": "Huila",
+      "center": [
+        2.9273,
+        -75.2819
+      ],
+      "status": "city-listed",
+      "qrutaCityId": null
+    },
+    {
+      "id": "pasto",
+      "name": "Pasto",
+      "department": "Nariño",
+      "center": [
+        1.2136,
+        -77.2811
+      ],
+      "status": "city-listed",
+      "qrutaCityId": null
+    },
+    {
+      "id": "santa-marta",
+      "name": "Santa Marta",
+      "department": "Magdalena",
+      "center": [
+        11.2408,
+        -74.199
+      ],
+      "status": "city-listed",
+      "qrutaCityId": null
+    },
+    {
+      "id": "tunja",
+      "name": "Tunja",
+      "department": "Boyacá",
+      "center": [
+        5.5353,
+        -73.3678
+      ],
+      "status": "city-listed",
+      "qrutaCityId": null
+    },
+    {
+      "id": "valledupar",
+      "name": "Valledupar",
+      "department": "Cesar",
+      "center": [
+        10.4631,
+        -73.2532
+      ],
+      "status": "city-listed",
+      "qrutaCityId": null
+    }
+  ],
+  "observedBarranquillaRoutes": [
+    {
+      "code": "A1",
+      "operator": "Coolitoral",
+      "name": "Silencio - Nogales - Corredor Universitario",
+      "sourceType": "public-nearby-listing",
+      "verifiedCurrent": false
+    },
+    {
+      "code": "A2",
+      "operator": "Coolitoral",
+      "name": "Corredor Universitario - Nogales - Silencio",
+      "sourceType": "public-nearby-listing",
+      "verifiedCurrent": false
+    },
+    {
+      "code": "A4",
+      "operator": "Coolitoral",
+      "name": "Peñita Nogales",
+      "sourceType": "public-nearby-listing",
+      "verifiedCurrent": false
+    },
+    {
+      "code": "A5",
+      "operator": "Cootransnorte",
+      "name": "Cordialidad - Silencio - Corredor Universitario",
+      "sourceType": "public-nearby-listing",
+      "verifiedCurrent": false
+    },
+    {
+      "code": "C14",
+      "operator": "Sobusa",
+      "name": "K-54 Uninorte",
+      "sourceType": "public-nearby-listing",
+      "verifiedCurrent": false
+    },
+    {
+      "code": "C16",
+      "operator": "Sobusa",
+      "name": "Granabastos Calle 72 Uninorte",
+      "sourceType": "public-nearby-listing",
+      "verifiedCurrent": false
+    },
+    {
+      "code": "PT2",
+      "operator": "Coolitoral",
+      "name": "Circunvalar Universidades Vía 40",
+      "sourceType": "public-nearby-listing",
+      "verifiedCurrent": false
+    },
+    {
+      "code": "PT3",
+      "operator": "Coolitoral",
+      "name": "Soledad 2000 Vía 40 Villa Carolina Universidades",
+      "sourceType": "public-nearby-listing",
+      "verifiedCurrent": false
+    }
+  ],
+  "dataFields": {
+    "route": [
+      "cityId",
+      "operator",
+      "code",
+      "name",
+      "direction",
+      "geometry",
+      "stops",
+      "serviceCalendar",
+      "frequency",
+      "sourceUrl",
+      "observedAt",
+      "verifiedAt"
+    ],
+    "stop": [
+      "id",
+      "name",
+      "lat",
+      "lon",
+      "routeIds",
+      "sourceUrl",
+      "observedAt",
+      "verifiedAt"
+    ]
+  }
+}
