@@ -82,7 +82,7 @@ async function loadGTFS(){
 function gtfsMeters(a,b){const rad=n=>n*Math.PI/180,R=6371000,dLat=rad(b.lat-a.lat),dLon=rad(b.lon-a.lon),x=Math.sin(dLat/2)**2+Math.cos(rad(a.lat))*Math.cos(rad(b.lat))*Math.sin(dLon/2)**2;return 2*R*Math.asin(Math.sqrt(x))}
 function gtfsNearStops(stops,point){return stops.map(s=>({...s,distance:gtfsMeters(point,s)})).filter(s=>s.distance<=1800).sort((a,b)=>a.distance-b.distance).slice(0,5)}
 function gtfsTimeRows(text,originIds,destIds){
- const rows=text.split(/\\r?\\n/);if(rows.length<2)return [];
+ const rows=text.split(/\\r?\\n/);if(rows.length<2)return {common:new Set(),stopRows:[]};
  const header=rows[0].split(','),idx=Object.fromEntries(header.map((v,i)=>[v,i]));
  const originTrips=new Set(),destTrips=new Set(),stopRows=[];
  for(let i=1;i<rows.length;i++){const line=rows[i];if(!line)continue;const v=line.split(','),tid=v[idx.trip_id],sid=v[idx.stop_id];if(!tid||!sid)continue;if(originIds.has(sid))originTrips.add(tid);if(destIds.has(sid))destTrips.add(tid)}
@@ -101,11 +101,12 @@ $('find-bus-routes').addEventListener('click',async()=>{
   const match=gtfsTimeRows(feed.timesText,new Set(origins.map(s=>s.stop_id)),new Set(destinations.map(s=>s.stop_id)));
   if(!match.common.size){$('gtfs-results').innerHTML='<div class="item"><strong>No se encontró conexión directa en el feed histórico.</strong><small>Esto no demuestra que hoy no exista un bus; el feed puede estar incompleto o desactualizado.</small></div>';gtfsStatus('Se revisaron '+origins.length+' paraderos cercanos al origen y '+destinations.length+' al destino. El feed GTFS tiene calendario histórico '+(feed.years.join(', ')||'sin fechas')+'. No se verificaron transbordos ni operación actual.');return}
   const stopById=new Map(feed.stops.map(s=>[s.stop_id,s]));
+  const rowsByTrip=new Map();match.stopRows.forEach(row=>{if(!rowsByTrip.has(row.trip_id))rowsByTrip.set(row.trip_id,[]);rowsByTrip.get(row.trip_id).push(row)});
   const found=[];
   for(const tid of match.common){
    const trip=feed.trips.get(tid);if(!trip)continue;
    const route=feed.routes.get(trip.route_id);if(!route)continue;
-   const sequence=match.stopRows.filter(r=>r.trip_id===tid).sort((a,b)=>a.stop_sequence-b.stop_sequence);
+   const sequence=(rowsByTrip.get(tid)||[]).sort((a,b)=>a.stop_sequence-b.stop_sequence);
    for(const o of origins){const oi=sequence.findIndex(r=>r.stop_id===o.stop_id);if(oi<0)continue;for(const d of destinations){const di=sequence.findIndex(r=>r.stop_id===d.stop_id);if(di<=oi)continue;
     const segment=sequence.slice(oi,di+1),first=segment[0],last=segment[segment.length-1],start=gtfsMinutes(first.departure_time||first.arrival_time),end=gtfsMinutes(last.arrival_time||last.departure_time);
     found.push({route,trip,segment,origin:o,dest:d,start,end,duration:start!==null&&end!==null?(end-start+1440)%1440:null});}}
