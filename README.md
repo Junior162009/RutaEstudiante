@@ -49,3 +49,15 @@ La rama `feat/planificador-rutas-fase1` añade selección de origen y destino, b
 Esta fase no calcula líneas de bus, paraderos de subida/bajada, horarios, transbordos ni ubicación GPS de vehículos. Para habilitar esas funciones hacen falta feeds GTFS vigentes y autorizados, validados para la zona, y un feed GTFS-Realtime oficial si se quieren mostrar vehículos en vivo. Los paraderos de OpenStreetMap no prueban que un servicio pase por ellos.
 
 El servicio de geocodificación y el motor de rutas son servicios públicos externos sujetos a disponibilidad, límites y políticas propias. La aplicación no debe presentar sus resultados como transporte público en tiempo real.
+
+## Planificador de transporte — Fase 2
+
+Esta fase añade una consulta opcional al catálogo público de paraderos de Transmetro en Datos Abiertos Colombia (`hxy3-94yh`). Los registros se representan como puntos y se etiquetan como históricos/no verificados; el catálogo informa que los datos de paraderos se actualizaron por última vez en 2020. Por ello, estos datos no deben usarse como confirmación de una ruta activa, horario vigente o posición de un bus. La app muestra errores de la fuente en lugar de inventar datos.
+
+Fuentes de referencia:
+- Catálogo de paraderos: https://www.datos.gov.co/resource/hxy3-94yh.json
+- Ficha del conjunto de datos: https://www.datos.gov.co/en/Transporte/Paraderos-del-Sistema/hxy3-94yh
+- Rutas y operación oficial: https://transmetro.gov.co/
+- Listado de rutas priorizadas del Área Metropolitana de Barranquilla: https://barranquilla.gov.co/transito/rutas-transporte-publico-barranquilla-soledad
+
+Limitación: no se ha encontrado ni validado en esta fase un feed GTFS vigente y un feed GTFS-Realtime autorizado que permita afirmar rutas completas, tiempos de llegada o localización de vehículos. El cálculo de conexiones y transbordos requiere datos actuales de itinerarios, secuencias de paradas y horarios.
